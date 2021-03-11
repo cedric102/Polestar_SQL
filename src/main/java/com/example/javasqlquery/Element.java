@@ -7,36 +7,36 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-////////////////////////////////
-// Class to Convert from JSON to SQL
-////////////
-// Author : Cedric Carteron
-//
-// Description : The class takes an array of objects
-// and one of its parameters aso takes an array of objects
-// ie: [{
-// 	"Name": "Site 1",
-// 	"AlarmColor": -1671296,
-// 	"Id": 8,
-// 	"Parameters": [{
-// 		"Key": "Name",
-// 		"Value": "Site 1"
-// 		}, ...
-//  ],
-// 	"DatasourcesCount": 0,
-// 	"_alertIcon": "Communications",
-// 	"ElementCount": 640,
-// 	"UniqueID": "87111c51-08df-4b29-85c5-43803a994bdd"
-// }, ...
-// ]
-//
-// Result : SQL Database with 2 Tables ROOT and PARAMETERS :
-//           - The ROOT takes all the fields from "Name" to "UniqueID"
-//           - the PARAMETERS takes takes all the "Key" and "Values" 
-//             related to the "Parameters" Field
-//           - A Foreigh Key is used to link both databases
-//             via the "Parameters" Field
-////////////////////////////////
+/*
+* Class to Convert from JSON to SQL
+*
+* @Author : Cedric Carteron
+*
+* Description : The class takes an array of objects
+* and one of its parameters aso takes an array of objects
+* ie: [{
+* 	"Name": "Site 1",
+* 	"AlarmColor": -1671296,
+* 	"Id": 8,
+* 	"Parameters": [{
+* 		"Key": "Name",
+* 		"Value": "Site 1"
+* 		}, ...
+*  ],
+* 	"DatasourcesCount": 0,
+* 	"_alertIcon": "Communications",
+* 	"ElementCount": 640,
+* 	"UniqueID": "87111c51-08df-4b29-85c5-43803a994bdd"
+* }, ...
+* ]
+*
+* Result : SQL Database with 2 Tables ROOT and PARAMETERS :
+*           - The ROOT takes all the fields from "Name" to "UniqueID"
+*           - the PARAMETERS takes takes all the "Key" and "Values" 
+*             related to the "Parameters" Field
+*           - A Foreigh Key is used to link both databases
+*             via the "Parameters" Field
+*/
 public class Element {
 
 	Connection conn = null;
