@@ -84,10 +84,6 @@ public class Element {
 			this.st = conn.createStatement();
 
 			this.resultSet = this.st.executeUpdate("CREATE TABLE ROOT ( " + " UniqueIndexId int NOT NULL , " // Unique
-																												// ID
-																												// for
-																												// each
-																												// item
 					+ " Name varchar(20) , " // Name of the Item
 					+ " AlarmColor int , " // AlarmColor of the Item
 					+ " Id int , " // Id of the Item
@@ -100,7 +96,6 @@ public class Element {
 					+ " PRIMARY KEY (UniqueIndexId) )");
 
 			this.resultSet = this.st.executeUpdate("CREATE TABLE PARAMETERS ( " + " UniqueIndexId int NOT NULL , " // Unique
-																													// ID
 					+ " ElementId int , " // Link to ROOT Table with the Foreign Key. Refer to Alter Table below
 					+ " IndexId int , " // Offset in the given ElementId
 					+ " _Key1 varchar(200) , " // JSON Data
