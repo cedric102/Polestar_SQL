@@ -11,8 +11,9 @@ public class JavaSqlQueryApplication {
 		// SpringApplication.run(JavaSqlQueryApplication.class, args);
 
 		Element e = new Element();
-		e.handling();
-
+		e.CreateTables();
+		e.PopulateTheTables();
+		
 	}
 
 }

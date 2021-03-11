@@ -67,14 +67,9 @@ public class Element {
 
 	}
 
-	public void handling() throws Exception {
+	public void CreateTables() throws Exception {
 
 		String myUrl = "jdbc:mysql://localhost/JAVA_SQL";
-
-		// Process the JSON File
-		JSONParser parse = new JSONParser();
-		JSONArray jsonArray;
-		int paramUniqueId = 0;
 
 		// Create the Tables ( Two of them )
 		try {
@@ -121,6 +116,17 @@ public class Element {
 			System.out.println(e.getMessage());
 			System.out.println("ADD FOREIGN KEY ERROR");
 		}
+
+	}
+
+	public void PopulateTheTables() throws Exception {
+
+		String myUrl = "jdbc:mysql://localhost/JAVA_SQL";
+
+		// Process the JSON File
+		JSONParser parse = new JSONParser();
+		JSONArray jsonArray;
+		int paramUniqueId = 0;
 
 		// Process the JSON File
 		try {
