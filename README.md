@@ -1,1 +1,2 @@
 # Polestart_SQL
+mvn exec:java -Dexec.mainClass=com.example.javasqlquery.JavaSqlQueryApplication -Dexec.args="/Users/cedric/View_Boot/java-sql-query/src/main/java/com/example/javasqlquery/input.json output.txt"
