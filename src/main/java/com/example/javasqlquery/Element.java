@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
@@ -122,26 +124,30 @@ public class Element implements IElement {
 
 	}
 
-	public void applyForeignKeyToTheTables() throws Exception {
+	public String applyForeignKeyToTheTables() throws Exception {
 
 		// Implement the Forreign Key
-		String alterTables = "ALTER TABLE PARAMETERS ADD FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
+		String alterTables = "ALTER TABLE PARAMETERS ADD CONSTRAINT FK_ElementId FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
+		return alterTables;
 	}
 
-	public void removeForeignKeyFromTheTables() throws Exception {
+	public String removeForeignKeyFromTheTables() throws Exception {
 
 		// Implement the Forreign Key
 		String alterTables = "ALTER TABLE PARAMETERS DROP CONSTRAINT FK_ElementId";
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
+		return alterTables;
 	}
 
-	public void PopulateTheTables() throws Exception {
+	public List<String> PopulateTheTables() throws Exception {
 		// Process the JSON File
+		List<String> res = new ArrayList<String>();
+
 		JSONParser parse = new JSONParser();
 		JSONArray jsonArray;
 		int paramUniqueId = 0;
@@ -170,6 +176,7 @@ public class Element implements IElement {
 								+ string_J_Index + " , \"" 
 								+ parObj.get("Key") + "\" , \""
 								+ parObj.get("Value") + "\" )";
+				res.add( paramValues );
 				outputRes.append( paramValues );
 				outputRes.append( "\n" );
 			}
@@ -186,10 +193,16 @@ public class Element implements IElement {
 									+ obj.get("_alertIcon")
 									+ "\" , " + obj.get("ElementCount") + " , \"" 
 									+ obj.get("UniqueID") + "\" )";
+
+			res.add( elemValues );
 			outputRes.append( elemValues );
 			outputRes.append( "\n" );
 		}
+		return res;
+	}
 
+	public String getOutputFile() {
+		return outputRes.toString();
 	}
 
 	public void obtainResult() throws Exception {

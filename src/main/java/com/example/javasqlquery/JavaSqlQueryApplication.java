@@ -20,13 +20,12 @@ public class JavaSqlQueryApplication {
 				// e = new ElementTransferToDB( "out.txt" );
 			}
 				
-
 			e.ConfigureDatabases();
 			e.CreateTables();
-			// e.PopulateTheTables();
-			// e.applyForeignKeyToTheTables();
-			// e.obtainResult();
-			// e.removeForeignKeyFromTheTables();
+			e.PopulateTheTables();
+			e.applyForeignKeyToTheTables();
+			e.obtainResult();
+			e.removeForeignKeyFromTheTables();
 		}
 	}
 
