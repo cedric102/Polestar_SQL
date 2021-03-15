@@ -59,7 +59,6 @@ public class ElementTransferToDB implements IElementTransferToDB {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.conn = DriverManager.getConnection(myUrl, "root", "passwordKi1s");
 			this.st = conn.createStatement();
-			// System.out.println( this.st );
 		} catch ( Exception e ) {
 			System.out.println( e );
 		}
@@ -129,12 +128,10 @@ public class ElementTransferToDB implements IElementTransferToDB {
 	public int applyForeignKeyToTheTables() throws Exception {
 
 		// Implement the Forreign Key
-		System.out.println( "alterTables" );
 		String alterTables = innerElem.applyForeignKeyToTheTables();
 		
 		this.resultSet = this.st.executeUpdate( alterTables );
 
-		System.out.println( this.resultSet );
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
