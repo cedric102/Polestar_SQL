@@ -51,9 +51,10 @@ public class Element implements IElement {
 	StringBuilder outputRes;
 	FileWriter outFile;
 	int argLength = 0;
+	String filePath = "src/main/java/com/example/javasqlquery/data/";
 
 	Element( ) {
-		inputFile = "/Users/cedric/View_Boot/java-sql-query/src/main/java/com/example/javasqlquery/input.json";
+		inputFile = "src/main/java/com/example/javasqlquery/data/input.json";
 		outputRes = new StringBuilder();
 		argLength = 1;
 	}
@@ -62,7 +63,7 @@ public class Element implements IElement {
 		for( int i=0 ; i<args.length ; i++ )
 			System.out.println( args[i] );
 		outputRes = new StringBuilder();
-		inputFile = args[0];
+		inputFile = filePath + args[0];
 		argLength = args.length;
 		if( args.length > 1 ) {
 			outputFile = args[1];
@@ -83,7 +84,7 @@ public class Element implements IElement {
 					+ IndexId + " , \"" 
 					+ _Key + "\" , \"" 
 					+ _Value + "\" )";
-		
+		System.out.println( sInsert );
 		return sInsert;
 
 	}
@@ -107,7 +108,6 @@ public class Element implements IElement {
 		res[0] = ElementDefine;
 		outputRes.append( ElementDefine );
 		outputRes.append( "\n" );
-		System.out.println( ElementDefine );
 
 		String paramDefine = "CREATE TABLE PARAMETERS ( "
 						+ " UniqueIndexId int NOT NULL CHECK (UniqueIndexId >= 0) , " // Unique
@@ -119,7 +119,6 @@ public class Element implements IElement {
 		res[1] = paramDefine;
 		outputRes.append( paramDefine );
 		outputRes.append( "\n" );
-		System.out.println( paramDefine );
 
 		return res;
 
@@ -130,7 +129,6 @@ public class Element implements IElement {
 		// Implement the Forreign Key
 		String alterTables = "ALTER TABLE PARAMETERS ADD CONSTRAINT FK_ElementId FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
 
-		System.out.println( alterTables );
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
@@ -177,8 +175,8 @@ public class Element implements IElement {
 								+ string_J_Index + " , \"" 
 								+ parObj.get("Key") + "\" , \""
 								+ parObj.get("Value") + "\" )";
+
 				res.add( paramValues );
-				System.out.println( paramValues );
 				outputRes.append( paramValues );
 				outputRes.append( "\n" );
 			}
@@ -196,7 +194,6 @@ public class Element implements IElement {
 									+ "\" , " + obj.get("ElementCount") + " , \"" 
 									+ obj.get("UniqueID") + "\" )";
 
-			System.out.println( elemValues );
 			res.add( elemValues );
 			outputRes.append( elemValues );
 			outputRes.append( "\n" );
@@ -213,7 +210,7 @@ public class Element implements IElement {
 			System.out.println( outputRes.toString() );
 		else {
 			try {
-				outFile = new FileWriter(outputFile);
+				outFile = new FileWriter(filePath + outputFile);
 			} catch( IOException e ) {
 				System.out.println( e );
 			}

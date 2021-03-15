@@ -45,6 +45,7 @@ public class ElementTransferToDB implements IElementTransferToDB {
 	StringBuilder outputRes;
 	FileWriter outFile;
 	IElement innerElem;
+	String filePath = "src/main/java/com/example/javasqlquery/data/";
 
 	public void ConfigureDatabases() throws Exception {
 
@@ -61,27 +62,27 @@ public class ElementTransferToDB implements IElementTransferToDB {
 
 	ElementTransferToDB( ) {
 		outputRes = new StringBuilder();
-		inputFile = "/Users/cedric/View_Boot/java-sql-query/src/main/java/com/example/javasqlquery/input.json";
-		outputFile = "output.txt";
+		inputFile = filePath + "input.json";
+		outputFile = filePath + "output.txt";
 	}
 
 	ElementTransferToDB( IElement e ) {
 		this.innerElem = e;
 		outputRes = new StringBuilder();
-		inputFile = "/Users/cedric/View_Boot/java-sql-query/src/main/java/com/example/javasqlquery/input.json";
-		outputFile = "output.txt";
+		inputFile = filePath + "input.json";
+		outputFile = filePath + "output.txt";
 	}
 
 	ElementTransferToDB( String outputFile ) {
 		outputRes = new StringBuilder();
-		inputFile = "/Users/cedric/View_Boot/java-sql-query/src/main/java/com/example/javasqlquery/input.json";
-		this.outputFile = outputFile;
+		inputFile = filePath + "input.json";
+		this.outputFile = filePath + outputFile;
 	}
 
 	ElementTransferToDB( String inputFile , String outputFile ) {
 		outputRes = new StringBuilder();
-		this.inputFile = inputFile;
-		this.outputFile = outputFile;
+		this.inputFile = filePath + inputFile;
+		this.outputFile = filePath + outputFile;
 	}
 
 	public int insertToRoot(int UniqueIndexId, int ElementId, int IndexId, String _Key, String _Value) {
