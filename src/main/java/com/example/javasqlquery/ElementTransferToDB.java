@@ -154,10 +154,11 @@ public class ElementTransferToDB implements IElementTransferToDB {
 	public int PopulateTheTables() throws Exception {
 
 		List<String> res = innerElem.PopulateTheTables();
-		for( String r : res )
-			if( this.st.executeUpdate( r ) != 0 )
-				return -1
-		;
+		for( String r : res ) {
+			int temp = this.st.executeUpdate( r );
+			if( temp != 1 )
+				return -1;
+		}
 		return 1;
 	}
 

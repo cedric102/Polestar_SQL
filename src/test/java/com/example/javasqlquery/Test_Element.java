@@ -1,6 +1,8 @@
 package com.example.javasqlquery;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.AdditionalMatchers;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,15 +71,16 @@ class Test_Element {
         assertEquals( "INSERT INTO PARAMETERS VALUES ( 100 , 1 , 1 , \"ELEM\" , \"VALUE\" )"
         , res );
 
-        List<String> pop = e.PopulateTheTables();
+        // List<String> pop = e.PopulateTheTables();
         String elem = "INSERT INTO PARAMETERS VALUES ( 14 , 2 , 2 , \"Nominal Power\" , \"5250\" )";
-        Mockito.when(stat.executeUpdate(elem)).thenReturn(-1); // Send Invalid Input
+        Mockito.when(stat.executeUpdate(elem)).thenReturn(1); // Send Valid Input
+        Mockito.when(stat.executeUpdate(AdditionalMatchers.not(Matchers.eq(elem)))).thenReturn(1); // Send Valid Input
         int iRes = eDB.PopulateTheTables();
-        assertEquals( -1 , iRes );
-
-        Mockito.when(stat.executeUpdate(elem)).thenReturn(0); // Send Valid Input
-        iRes = eDB.PopulateTheTables();
         assertEquals( 1 , iRes );
+
+        Mockito.when(stat.executeUpdate(elem)).thenReturn(-1); // Send Invalid Input
+        iRes = eDB.PopulateTheTables();
+        assertEquals( -1 , iRes );
 
     }
     

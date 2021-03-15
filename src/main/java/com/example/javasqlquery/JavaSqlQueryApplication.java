@@ -8,7 +8,7 @@ public class JavaSqlQueryApplication {
 	public static void main(String[] args) throws Exception {
 
 		// ElementTransferToDB e = new ElementTransferToDB( );
-		String sChoice = "RUN_APPLICATION";
+		String sChoice = "CLI";
 
 		if( sChoice.equals( "CLI" ) || sChoice.equals( "RUN_APPLICATION" ) ) {
 			if( sChoice.equals( "CLI" ) ) {
