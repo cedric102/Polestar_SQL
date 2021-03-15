@@ -75,7 +75,7 @@ public class Element implements IElement {
 		System.out.println();
 	}
 
-	public int insertToRoot(int UniqueIndexId, int ElementId, int IndexId, String _Key, String _Value) {
+	public String insertToRoot(int UniqueIndexId, int ElementId, int IndexId, String _Key, String _Value) {
 
 		String sInsert = "INSERT INTO PARAMETERS VALUES ( " 
 					+ UniqueIndexId + " , " 
@@ -83,9 +83,8 @@ public class Element implements IElement {
 					+ IndexId + " , \"" 
 					+ _Key + "\" , \"" 
 					+ _Value + "\" )";
-		System.out.println(sInsert);
 		
-		return 1;
+		return sInsert;
 
 	}
 
@@ -108,6 +107,7 @@ public class Element implements IElement {
 		res[0] = ElementDefine;
 		outputRes.append( ElementDefine );
 		outputRes.append( "\n" );
+		System.out.println( ElementDefine );
 
 		String paramDefine = "CREATE TABLE PARAMETERS ( "
 						+ " UniqueIndexId int NOT NULL CHECK (UniqueIndexId >= 0) , " // Unique
@@ -119,6 +119,7 @@ public class Element implements IElement {
 		res[1] = paramDefine;
 		outputRes.append( paramDefine );
 		outputRes.append( "\n" );
+		System.out.println( paramDefine );
 
 		return res;
 
@@ -128,6 +129,8 @@ public class Element implements IElement {
 
 		// Implement the Forreign Key
 		String alterTables = "ALTER TABLE PARAMETERS ADD CONSTRAINT FK_ElementId FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
+
+		System.out.println( alterTables );
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
@@ -151,13 +154,11 @@ public class Element implements IElement {
 		JSONParser parse = new JSONParser();
 		JSONArray jsonArray;
 		int paramUniqueId = 0;
-		System.out.println( "0" );
 
 		// Process the JSON File
 		FileReader reader = new FileReader( inputFile );
 		jsonArray = (JSONArray) parse.parse(reader);
 
-		System.out.println( "1" );
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject obj = (JSONObject) jsonArray.get(i);
 
@@ -177,6 +178,7 @@ public class Element implements IElement {
 								+ parObj.get("Key") + "\" , \""
 								+ parObj.get("Value") + "\" )";
 				res.add( paramValues );
+				System.out.println( paramValues );
 				outputRes.append( paramValues );
 				outputRes.append( "\n" );
 			}
@@ -194,6 +196,7 @@ public class Element implements IElement {
 									+ "\" , " + obj.get("ElementCount") + " , \"" 
 									+ obj.get("UniqueID") + "\" )";
 
+			System.out.println( elemValues );
 			res.add( elemValues );
 			outputRes.append( elemValues );
 			outputRes.append( "\n" );
