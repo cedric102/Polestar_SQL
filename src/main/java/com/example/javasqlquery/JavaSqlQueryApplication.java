@@ -8,11 +8,10 @@ public class JavaSqlQueryApplication {
 	public static void main(String[] args) throws Exception {
 
 		// ElementTransferToDB e = new ElementTransferToDB( );
-		String sChoice = "CLI";
+		String sChoice = "RUN_APPLICATION";
 
 		if( sChoice.equals( "CLI" ) || sChoice.equals( "RUN_APPLICATION" ) ) {
 			if( sChoice.equals( "CLI" ) ) {
-
 				IElement e;
 				e = new Element( args );
 				e.ConfigureDatabases();
@@ -31,7 +30,6 @@ public class JavaSqlQueryApplication {
 				e.applyForeignKeyToTheTables();
 				e.obtainResult();
 				e.removeForeignKeyFromTheTables();
-				// e = new ElementTransferToDB( "out.txt" );
 			}
 				
 		}

@@ -4,11 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.*;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -31,19 +28,7 @@ class Test_Element {
     }
 
 	@Test
-	public void setup() throws Exception {
-        // Ensure the tables do not exist first
-        e.CreateTables();
-        e.PopulateTheTables();
-        assertEquals( -1 , -1 );
-    }
-
-	@Test
 	public void createTables() throws Exception {
-        
-        String res = e.insertToRoot( 100 , 1 , 1 , "ELEM" , "VALUE" );
-        assertEquals( "INSERT INTO PARAMETERS VALUES ( 100 , 1 , 1 , \"ELEM\" , \"VALUE\" )"
-        , res );
 
         String [] res2 = e.CreateTables();
         assertEquals( 2 , res2.length );
@@ -57,11 +42,6 @@ class Test_Element {
         iRes = eDB.CreateTables();
         assertEquals( 1 , iRes );
 
-        // res = e.insertToRoot( 100 , 1 , 1 , "ELEM" , "VALUE" );
-        // assertEquals( -1 , res );
-
-        // res = e.insertToRoot( -1 , 1 , 1 , "ELEM" , "VALUE" );
-        // assertEquals( -1 , res );
     }
 
 	@Test

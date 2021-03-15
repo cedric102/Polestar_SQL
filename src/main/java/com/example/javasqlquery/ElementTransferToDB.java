@@ -1,14 +1,9 @@
 package com.example.javasqlquery;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
-
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 /*
 * Class to Convert from JSON to SQL
@@ -111,12 +106,9 @@ public class ElementTransferToDB implements IElementTransferToDB {
 		try {
 			int r1 = this.st.executeUpdate( res[0] );
 			int r2 = this.st.executeUpdate( res[1] );
-			System.out.println( " Create : " +  r1 );
-			System.out.println( r2 );
 			if( r1 == 0 && r2 == 0 ) {
 				return 1;
-			 }
-			else
+			} else
 				return -1;
 		} catch ( Exception e ) {
 			System.out.println(e);
@@ -131,7 +123,6 @@ public class ElementTransferToDB implements IElementTransferToDB {
 		String alterTables = innerElem.applyForeignKeyToTheTables();
 		
 		this.resultSet = this.st.executeUpdate( alterTables );
-
 		outputRes.append( alterTables );
 		outputRes.append( "\n" );
 
