@@ -23,27 +23,44 @@ class Test_Element {
 
         inner = new Element();
         eDB = new ElementTransferToDB( inner );
+
+        // Insert the Statement Mockito to the composed Object
         eDB.st = stat;
-        Mockito.when(stat.executeUpdate("0")).thenReturn(1);
     }
 
+    /**
+     * Test the Create Table Functions
+     * @Author : C. Carteron
+     * @Params : None
+     * @Return : None
+     * @throws Exception
+     */
 	@Test
 	public void createTables() throws Exception {
 
         String [] res2 = e.CreateTables();
         assertEquals( 2 , res2.length );
 
+        // Create a Failure with an error on the second element of the array
         Mockito.when(stat.executeUpdate(res2[0])).thenReturn(0);
         Mockito.when(stat.executeUpdate(res2[1])).thenReturn(-1);
         int iRes = eDB.CreateTables();
         assertEquals( -1 , iRes );
 
+        // Correct the error on the second element of the array
         Mockito.when(stat.executeUpdate(res2[1])).thenReturn(0);
         iRes = eDB.CreateTables();
         assertEquals( 1 , iRes );
 
     }
 
+    /**
+     * Test the Insert to Table Functions
+     * @Author : C. Carteron
+     * @Params : None
+     * @Return : None
+     * @throws Exception
+     */
 	@Test
 	public void insertToTable() throws Exception {
         
@@ -51,13 +68,14 @@ class Test_Element {
         assertEquals( "INSERT INTO PARAMETERS VALUES ( 100 , 1 , 1 , \"ELEM\" , \"VALUE\" )"
         , res );
 
-        // List<String> pop = e.PopulateTheTables();
+        // Create a Failure with an error on the second element of the array
         String elem = "INSERT INTO PARAMETERS VALUES ( 14 , 2 , 2 , \"Nominal Power\" , \"5250\" )";
         Mockito.when(stat.executeUpdate(elem)).thenReturn(1); // Send Valid Input
         Mockito.when(stat.executeUpdate(AdditionalMatchers.not(Matchers.eq(elem)))).thenReturn(1); // Send Valid Input
         int iRes = eDB.PopulateTheTables();
         assertEquals( 1 , iRes );
 
+        // Correct the error on the second element of the array
         Mockito.when(stat.executeUpdate(elem)).thenReturn(-1); // Send Invalid Input
         iRes = eDB.PopulateTheTables();
         assertEquals( -1 , iRes );
