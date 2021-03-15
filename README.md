@@ -11,13 +11,12 @@ Running the Application in different way :
 
 # Implementation :
     - The Program uses the Decorator Design Pattern:
-      . If one prefers not to execute the SQL Queries , the 'Element' Class will be executed and .
       . Element Class Description : 'Element' Class SQL Methods delivers the SQL Command as String.
       . ElementTransferToDB Class Description : The Strings provided by 'Element' Class are used in ElementTransferToDB Method using the Decorator Design Pattern to add the SQL Execution of those String SQL Commands.
-      . Result : This way, one could choose whether to store the SQL Commands in a File , print those Commands in the 'Element' Class , or Executing them in the 'ElementTransferToDB Class.
+      . Result : This way, the user could choose whether to store the SQL Commands in a File , print those Commands with the 'Element' Class , or Executing them with the 'ElementTransferToDB Class.
 
 ## CLI Command :
-Template : 
+Below is the CLI Command to execude the program : 
 mvn exec:java -Dexec.mainClass=com.example.javasqlquery.JavaSqlQueryApplication -Dexec.args="File_1.txt File_2.txt"
 The Command above provides the CLI Template to run the program.
 It takes the following arguments :

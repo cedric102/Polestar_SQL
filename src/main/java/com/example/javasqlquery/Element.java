@@ -12,7 +12,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /*
-* Class to Convert from JSON to SQL
+* Class to Convert from JSON to SQL String
 *
 * @Author : Cedric Carteron
 *
@@ -34,7 +34,7 @@ import org.json.simple.JSONObject;
 * }, ...
 * ]
 *
-* Result : SQL Database with 2 Tables ROOT and PARAMETERS :
+* Returns : The String Representation of the SQL Database with 2 Tables ROOT and PARAMETERS :
 *           - The ROOT takes all the fields from "Name" to "UniqueID"
 *           - the PARAMETERS takes takes all the "Key" and "Values" 
 *             related to the "Parameters" Field
@@ -46,15 +46,21 @@ public class Element implements IElement {
 	Connection conn = null;
 	public Statement st = null;
 	int resultSet = -1;
-	String inputFile = "";
-	String outputFile = "";
+	
+	// To be used to populate the file or printing the list of commands when it is requested
+	// This Variable is built in each SQL Method Management
+	// Used during obtainResult()
 	StringBuilder outputRes;
-	FileWriter outFile;
+
+	// File Variables
 	int argLength = 0;
+	String inputFilePath = "";
+	String outputFilePath = "";
 	String filePath = "src/main/java/com/example/javasqlquery/data/";
+	FileWriter outputFile;
 
 	Element( ) {
-		inputFile = "src/main/java/com/example/javasqlquery/data/input.json";
+		inputFilePath = "src/main/java/com/example/javasqlquery/data/input.json";
 		outputRes = new StringBuilder();
 		argLength = 1;
 	}
@@ -63,10 +69,14 @@ public class Element implements IElement {
 		for( int i=0 ; i<args.length ; i++ )
 			System.out.println( args[i] );
 		outputRes = new StringBuilder();
-		inputFile = filePath + args[0];
+
+		// Store Input File Path
+		inputFilePath = filePath + args[0];
+
+		// Store Output File Path if requested
 		argLength = args.length;
 		if( args.length > 1 ) {
-			outputFile = args[1];
+			outputFilePath = args[1];
 		}
 	}
 
@@ -89,6 +99,13 @@ public class Element implements IElement {
 
 	}
 
+	/**
+	 * Create The Tables
+	 * This Class Populates the SQL Query String to be used to create those tables
+	 * @Author : C. Carteron
+	 * @Params : None
+	 * @Return : Strings[] -> "Create Table SQL Query String"
+	 */
 	public String [] CreateTables() throws Exception {
 
 		String [] res = new String[2];
@@ -124,27 +141,12 @@ public class Element implements IElement {
 
 	}
 
-	public String applyForeignKeyToTheTables() throws Exception {
-
-		// Implement the Forreign Key
-		String alterTables = "ALTER TABLE PARAMETERS ADD CONSTRAINT FK_ElementId FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
-
-		outputRes.append( alterTables );
-		outputRes.append( "\n" );
-
-		return alterTables;
-	}
-
-	public String removeForeignKeyFromTheTables() throws Exception {
-
-		// Implement the Forreign Key
-		String alterTables = "ALTER TABLE PARAMETERS DROP CONSTRAINT FK_ElementId";
-		outputRes.append( alterTables );
-		outputRes.append( "\n" );
-
-		return alterTables;
-	}
-
+	/**
+	 * Populate the SQL Insertion To Table List of String
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : List<String> containing the SQL Queries "INSERT INTO TABLE ..."
+	 */
 	public List<String> PopulateTheTables() throws Exception {
 		// Process the JSON File
 		List<String> res = new ArrayList<String>();
@@ -154,7 +156,7 @@ public class Element implements IElement {
 		int paramUniqueId = 0;
 
 		// Process the JSON File
-		FileReader reader = new FileReader( inputFile );
+		FileReader reader = new FileReader( inputFilePath );
 		jsonArray = (JSONArray) parse.parse(reader);
 
 		for (int i = 0; i < jsonArray.size(); i++) {
@@ -200,22 +202,61 @@ public class Element implements IElement {
 		}
 		return res;
 	}
+	
+	/**
+	 * Populate the SQL Foreign Key Addition To Table and return the String
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : String containing the SQL Queries "ALTER TABLE ..."
+	 */
+	public String applyForeignKeyToTheTables() throws Exception {
+
+		// Implement the Forreign Key
+		String alterTables = "ALTER TABLE PARAMETERS ADD CONSTRAINT FK_ElementId FOREIGN KEY (ElementId) REFERENCES ROOT (UniqueIndexId)";
+
+		outputRes.append( alterTables );
+		outputRes.append( "\n" );
+
+		return alterTables;
+	}
+
+	/**
+	 * Populate the SQL Foreign Key Removal To Table and return the String
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : String containing the SQL Queries "ALTER TABLE ..."
+	 */
+	public String removeForeignKeyFromTheTables() throws Exception {
+
+		// Implement the Forreign Key
+		String alterTables = "ALTER TABLE PARAMETERS DROP CONSTRAINT FK_ElementId";
+		outputRes.append( alterTables );
+		outputRes.append( "\n" );
+
+		return alterTables;
+	}
 
 	public String getOutputFile() {
 		return outputRes.toString();
 	}
 
+	/**
+	 * Print / Store on the provided File the outputRes Content
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : 1 if a Query succeed
+	 */
 	public void obtainResult() throws Exception {
-		if( outputFile.equals("") )
+		if( outputFilePath.equals("") )
 			System.out.println( outputRes.toString() );
 		else {
 			try {
-				outFile = new FileWriter(filePath + outputFile);
+				outputFile = new FileWriter(filePath + outputFilePath);
 			} catch( IOException e ) {
 				System.out.println( e );
 			}
-			outFile.write( outputRes.toString() );
-			outFile.close( );
+			outputFile.write( outputRes.toString() );
+			outputFile.close( );
 		}
 	}
 

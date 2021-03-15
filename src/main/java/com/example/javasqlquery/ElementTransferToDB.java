@@ -40,13 +40,28 @@ public class ElementTransferToDB implements IElementTransferToDB {
 	Connection conn = null;
 	Statement st = null;
 	int resultSet = -1;
-	String inputFile;
-	String outputFile;
-	StringBuilder outputRes;
-	FileWriter outFile;
-	IElement innerElem;
-	String filePath = "src/main/java/com/example/javasqlquery/data/";
 
+	// Composition on IElement in order to build on the to
+	// of what those methods return using the Decorator Design PAttern
+	IElement innerElem;
+	
+	// To be used to populate the file or printing the list of commands when it is requested
+	// This Variable is built in each SQL Method Management
+	// Used during obtainResult()
+	StringBuilder outputRes;
+
+	// File Variables
+	String inputFilePath;
+	String outputFilePath;
+	String filePath = "src/main/java/com/example/javasqlquery/data/";
+	FileWriter outputFile;
+
+	/**
+	 * Create the Database Connection
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : None
+	 */
 	public void ConfigureDatabases() throws Exception {
 
 		String myUrl = "jdbc:mysql://localhost/JAVA_SQL";
@@ -60,29 +75,47 @@ public class ElementTransferToDB implements IElementTransferToDB {
 		}
 	}
 
+	/**
+	 * Initialize the File Path Variables
+	 * Using the Default Values
+	 */
 	ElementTransferToDB( ) {
 		outputRes = new StringBuilder();
-		inputFile = filePath + "input.json";
-		outputFile = filePath + "output.txt";
+		inputFilePath = filePath + "input.json";
+		outputFilePath = filePath + "output.txt";
 	}
 
+	/**
+	 * Initialize the File Path Variables
+	 * and makes use of the Decorator Pattern
+	 * Using the Default Values
+	 */
 	ElementTransferToDB( IElement e ) {
 		this.innerElem = e;
 		outputRes = new StringBuilder();
-		inputFile = filePath + "input.json";
-		outputFile = filePath + "output.txt";
+		inputFilePath = filePath + "input.json";
+		outputFilePath = filePath + "output.txt";
 	}
 
+	/**
+	 * Initialize the File Path Variables
+	 * Using the Default Value of the input file
+	 * Override the output file
+	 */
 	ElementTransferToDB( String outputFile ) {
 		outputRes = new StringBuilder();
-		inputFile = filePath + "input.json";
-		this.outputFile = filePath + outputFile;
+		inputFilePath = filePath + "input.json";
+		this.outputFilePath = filePath + outputFile;
 	}
 
-	ElementTransferToDB( String inputFile , String outputFile ) {
+	/**
+	 * Initialize the File Path Variables
+	 * Override the input file and output file
+	 */
+	ElementTransferToDB( String inputFileName , String outputFile ) {
 		outputRes = new StringBuilder();
-		this.inputFile = filePath + inputFile;
-		this.outputFile = filePath + outputFile;
+		this.inputFilePath = filePath + inputFileName;
+		this.outputFilePath = filePath + outputFile;
 	}
 
 	public int insertToRoot(int UniqueIndexId, int ElementId, int IndexId, String _Key, String _Value) {
@@ -99,6 +132,12 @@ public class ElementTransferToDB implements IElementTransferToDB {
 
 	}
 
+	/**
+	 * Execute the SQL Table using the Array of String provided by the innerElem
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : -1 if a Query fails
+	 */
 	public int CreateTables() throws Exception {
 
 		// Create the Tables ( Two of them )
@@ -117,7 +156,30 @@ public class ElementTransferToDB implements IElementTransferToDB {
 		}
 
 	}
+	
+	/**
+	 * Execute the SQL Insertion To Table using the List of String provided by the innerElem
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : -1 if a Query fails
+	 */
+	public int PopulateTheTables() throws Exception {
 
+		List<String> res = innerElem.PopulateTheTables();
+		for( String r : res ) {
+			int temp = this.st.executeUpdate( r );
+			if( temp != 1 )
+				return -1;
+		}
+		return 1;
+	}
+
+	/**
+	 * Execute the SQL Foreign Key Addition To Table using the String provided by the innerElem
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : 1 if a Query succeed
+	 */
 	public int applyForeignKeyToTheTables() throws Exception {
 
 		// Implement the Forreign Key
@@ -131,6 +193,12 @@ public class ElementTransferToDB implements IElementTransferToDB {
 
 	}
 
+	/**
+	 * Execute the SQL Foreign Key Removal To Table using the String provided by the innerElem
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : 1 if a Query succeed
+	 */
 	public int removeForeignKeyFromTheTables() throws Exception {
 
 		// Implement the Forreign Key
@@ -142,35 +210,31 @@ public class ElementTransferToDB implements IElementTransferToDB {
 		
 		return this.resultSet;
 	}
-	
-	public int PopulateTheTables() throws Exception {
-
-		List<String> res = innerElem.PopulateTheTables();
-		for( String r : res ) {
-			int temp = this.st.executeUpdate( r );
-			if( temp != 1 )
-				return -1;
-		}
-		return 1;
-	}
-
 
 	public String getOutputFile() {
 		return outputRes.toString();
 	}
 
+	/**
+	 * Print / Store on the provided File the outputRes Content
+	 * @Author : C. Carteron
+	 * @Param : None
+	 * @Return : 1 if a Query succeed
+	 */
 	public void obtainResult() throws Exception {
-		if( outputFile.equals("") )
-			System.out.println( innerElem.getOutputFile() );
+
+		if( outputFilePath.equals("") )
+			innerElem.obtainResult();
 		else {
 			try {
-				outFile = new FileWriter(outputFile);
+				outputFile = new FileWriter(outputFilePath);
 			} catch( IOException e ) {
 				System.out.println( e );
 			}
-			outFile.write( innerElem.getOutputFile() );
-			outFile.close( );
+			outputFile.write( innerElem.getOutputFile() );
+			outputFile.close( );
 		}
+		
 	}
 
 }
